@@ -12,6 +12,7 @@ import {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import FadeIn from "./fadeIn";
 import { useEffect, useState } from "react";
+import Pad from "./pad";
 
 export default function Game(): JSX.Element {
   const [move, setMove] = useState<Move>(Move.Idle);
@@ -32,15 +33,15 @@ export default function Game(): JSX.Element {
       setTimeout(() => {
         if (move === pads[pad]) {
           console.log(move, pads[pad]);
-          console.log("correto");
+          console.log("ok");
         } else {
           console.log(move, pads[pad]);
-          console.log("errado");
+          console.log("wrong");
         }
         setPad(pad + 1);
         setCanMove(false);
         setMove(Move.Idle);
-      }, 3000);
+      }, 5000);
     }
   }, [canMove]);
 
@@ -58,25 +59,11 @@ export default function Game(): JSX.Element {
   return (
     <PanGestureHandler onGestureEvent={handleGesture}>
       <SafeAreaView style={styles.container}>
-        {/* <FadeIn duration={1000}>
-        </FadeIn> */}
-        <Text style={{ color: Colors.white }}>{move}</Text>
-
-        <TouchableOpacity
-          onPress={() => {
-            setCanMove(true);
-          }}
-        >
-          <Text style={{ color: Colors.white }}>true</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            setCanMove(false);
-          }}
-        >
-          <Text style={{ color: Colors.white }}>false</Text>
-        </TouchableOpacity>
+        <Pad
+          duration={10000}
+          onFadeOut={() => setCanMove(true)}
+          direction={Move.Up}
+        />
 
         <StatusBar style="auto" hidden={true} />
       </SafeAreaView>
