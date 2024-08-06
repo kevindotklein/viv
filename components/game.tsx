@@ -25,25 +25,32 @@ export default function Game(): JSX.Element {
     Move.Up,
     Move.Down,
   ]);
-  const [canMove, setCanMove] = useState<Boolean>(false);
-  const [pad, setPad] = useState<number>(0);
+  const [pad, setPad] = useState<number>(-1);
+  const [points, setPoints] = useState<number>(0);
 
   useEffect(() => {
-    if (canMove === true) {
-      setTimeout(() => {
-        if (move === pads[pad]) {
-          console.log(move, pads[pad]);
-          console.log("ok");
-        } else {
-          console.log(move, pads[pad]);
-          console.log("wrong");
-        }
-        setPad(pad + 1);
-        setCanMove(false);
-        setMove(Move.Idle);
-      }, 5000);
+    if (pad < pads.length && pad >= 0) {
+      if (move === pads[pad]) {
+        console.log(
+          "move: ",
+          move,
+          "pad: ",
+          pads[pad],
+          `pad index: pads[${pad}]`
+        );
+        setPoints(points + 1);
+      } else {
+        console.log(
+          "move: ",
+          move,
+          "pad: ",
+          pads[pad],
+          `pad index: pads[${pad}]`
+        );
+      }
+      setMove(Move.Idle);
     }
-  }, [canMove]);
+  }, [pad]);
 
   const handleGesture = (e: GestureEventType) => {
     const { translationX, translationY } = e.nativeEvent;
@@ -56,14 +63,24 @@ export default function Game(): JSX.Element {
     }
   };
 
+  // const generateRandomMoves = (length: number): Move[] => {
+  //   return Array.from({length: })
+  // }
+
   return (
     <PanGestureHandler onGestureEvent={handleGesture}>
       <SafeAreaView style={styles.container}>
-        <Pad
-          duration={10000}
-          onFadeOut={() => setCanMove(true)}
-          direction={Move.Up}
-        />
+        <Text style={styles.counter}>{points}</Text>
+
+        {pads.map((p: Move, i: number) => (
+          <Pad
+            key={i}
+            duration={2000}
+            onFadeOut={() => setPad(pad + 1)}
+            direction={p}
+            isActive={i === pad + 1}
+          />
+        ))}
 
         <StatusBar style="auto" hidden={true} />
       </SafeAreaView>
@@ -78,5 +95,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  counter: {
+    color: Colors.white,
+    position: "absolute",
+    top: 120,
+    fontSize: 48,
+    fontWeight: "bold",
+    fontFamily: "sans-serif",
   },
 });

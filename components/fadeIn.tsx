@@ -23,7 +23,7 @@ export default function FadeIn({
         Animated.parallel([
           Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 1000,
+            duration,
             useNativeDriver: true,
           }),
           Animated.timing(scaleAnim, {

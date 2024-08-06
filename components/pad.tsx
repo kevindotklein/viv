@@ -1,14 +1,22 @@
+import { Colors } from "@/constants/colors";
 import FadeIn from "./fadeIn";
 import { Move } from "@/types/types";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 
 interface Props {
   duration: number;
   onFadeOut: () => void;
   direction: Move;
+  isActive: boolean;
 }
 
-export default function Pad({ duration, onFadeOut, direction }: Props) {
+export default function Pad({
+  duration,
+  onFadeOut,
+  direction,
+  isActive,
+}: Props) {
   const pickDirection = (dir: Move) => {
     switch (dir) {
       case Move.Up:
@@ -24,7 +32,7 @@ export default function Pad({ duration, onFadeOut, direction }: Props) {
     }
   };
 
-  return (
+  return isActive ? (
     <FadeIn duration={duration} onFadeOut={onFadeOut}>
       <View
         style={{
@@ -34,25 +42,37 @@ export default function Pad({ duration, onFadeOut, direction }: Props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          borderRadius: 10,
         }}
       >
-        <Text style={{ color: "white" }}>ldksajflksd</Text>
+        {direction === Move.Up && (
+          <ArrowUp color={Colors.white} strokeWidth={2.5} size={28} />
+        )}
+        {direction === Move.Down && (
+          <ArrowDown color={Colors.white} strokeWidth={2.5} size={28} />
+        )}
+        {direction === Move.Right && (
+          <ArrowRight color={Colors.white} strokeWidth={2.5} size={28} />
+        )}
+        {direction === Move.Left && (
+          <ArrowLeft color={Colors.white} strokeWidth={2.5} size={28} />
+        )}
       </View>
     </FadeIn>
-  );
+  ) : null;
 }
 
 const styles = StyleSheet.create({
   up: {
-    backgroundColor: "green",
+    backgroundColor: Colors.greenPad,
   },
   down: {
-    backgroundColor: "red",
+    backgroundColor: Colors.redPad,
   },
   right: {
-    backgroundColor: "blue",
+    backgroundColor: Colors.bluePad,
   },
   left: {
-    backgroundColor: "yellow",
+    backgroundColor: Colors.yellowPad,
   },
 });

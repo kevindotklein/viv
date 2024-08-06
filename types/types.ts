@@ -3,9 +3,9 @@ export interface GestureEventType {
 }
 
 export enum Move {
-  Idle,
   Up,
   Down,
   Right,
   Left,
+  Idle,
 }
