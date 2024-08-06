@@ -16,17 +16,18 @@ import Pad from "./pad";
 
 export default function Game(): JSX.Element {
   const [move, setMove] = useState<Move>(Move.Idle);
-  const [pads, setPads] = useState<Move[]>([
-    Move.Up,
-    Move.Down,
-    Move.Right,
-    Move.Down,
-    Move.Left,
-    Move.Up,
-    Move.Down,
-  ]);
   const [pad, setPad] = useState<number>(-1);
   const [points, setPoints] = useState<number>(0);
+
+  const generateRandomMoves = (length: number): Move[] => {
+    const moves: Move[] = [Move.Up, Move.Down, Move.Right, Move.Left];
+    return Array.from(
+      { length },
+      () => moves[Math.floor(Math.random() * moves.length)]
+    );
+  };
+
+  const [pads, setPads] = useState<Move[]>(() => generateRandomMoves(7));
 
   useEffect(() => {
     if (pad < pads.length && pad >= 0) {
@@ -62,10 +63,6 @@ export default function Game(): JSX.Element {
       }
     }
   };
-
-  // const generateRandomMoves = (length: number): Move[] => {
-  //   return Array.from({length: })
-  // }
 
   return (
     <PanGestureHandler onGestureEvent={handleGesture}>
