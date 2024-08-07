@@ -13,6 +13,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import FadeIn from "./fadeIn";
 import { useEffect, useState } from "react";
 import Pad from "./pad";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react-native";
 
 export default function Game(): JSX.Element {
   const [move, setMove] = useState<Move>(Move.Idle);
@@ -28,7 +29,7 @@ export default function Game(): JSX.Element {
     );
   };
 
-  const [pads, setPads] = useState<Move[]>(() => generateRandomMoves(7));
+  const [pads, setPads] = useState<Move[]>(() => generateRandomMoves(30));
 
   const setAndDisableMove = (move: Move) => {
     setMove(move);
@@ -87,12 +88,45 @@ export default function Game(): JSX.Element {
             duration={2000}
             onFadeOut={() => {
               setPad(pad + 1);
-              setCanMove(true);
+              i !== pads.length - 1 ? setCanMove(true) : setCanMove(false);
             }}
             direction={p}
             isActive={i === pad + 1}
           />
         ))}
+
+        {move === Move.Up && (
+          <ArrowUp
+            style={styles.playerMove}
+            color={Colors.white}
+            strokeWidth={2.5}
+            size={28}
+          />
+        )}
+        {move === Move.Down && (
+          <ArrowDown
+            style={styles.playerMove}
+            color={Colors.white}
+            strokeWidth={2.5}
+            size={28}
+          />
+        )}
+        {move === Move.Right && (
+          <ArrowRight
+            style={styles.playerMove}
+            color={Colors.white}
+            strokeWidth={2.5}
+            size={28}
+          />
+        )}
+        {move === Move.Left && (
+          <ArrowLeft
+            style={styles.playerMove}
+            color={Colors.white}
+            strokeWidth={2.5}
+            size={28}
+          />
+        )}
 
         <StatusBar style="auto" hidden={true} />
       </SafeAreaView>
@@ -116,5 +150,10 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: "bold",
     fontFamily: "sans-serif",
+  },
+
+  playerMove: {
+    position: "absolute",
+    top: 500,
   },
 });
