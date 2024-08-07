@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/colors";
+import { Colors } from "@/constants/vivcolors";
 import FadeIn from "./fadeIn";
 import { Move } from "@/types/types";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react-native";

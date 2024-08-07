@@ -5,4 +5,5 @@ export const Colors = {
   redPad: "#ff513c",
   bluePad: "#6a3cff",
   yellowPad: "#ed9121",
+  greenPoints: "#50c878",
 };

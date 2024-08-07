@@ -1,7 +1,8 @@
-import { Colors } from "@/constants/colors";
+import { Colors } from "@/constants/vivcolors";
 import { Move, GestureEventType } from "@/types/types";
 import { StatusBar } from "expo-status-bar";
 import {
+  Animated,
   Button,
   SafeAreaView,
   StyleSheet,
@@ -11,7 +12,7 @@ import {
 } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import FadeIn from "./fadeIn";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Pad from "./pad";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react-native";
 
@@ -20,6 +21,7 @@ export default function Game(): JSX.Element {
   const [pad, setPad] = useState<number>(-1);
   const [points, setPoints] = useState<number>(0);
   const [canMove, setCanMove] = useState<boolean>(true);
+  const pointsColorAnim = useRef(new Animated.Value(0)).current;
 
   const generateRandomMoves = (length: number): Move[] => {
     const moves: Move[] = [Move.Up, Move.Down, Move.Right, Move.Left];
@@ -36,6 +38,21 @@ export default function Game(): JSX.Element {
     setCanMove(false);
   };
 
+  const animatePoints = () => {
+    Animated.sequence([
+      Animated.timing(pointsColorAnim, {
+        toValue: 1,
+        duration: 0,
+        useNativeDriver: false,
+      }),
+      Animated.timing(pointsColorAnim, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: false,
+      }),
+    ]).start();
+  };
+
   useEffect(() => {
     if (pad < pads.length && pad >= 0) {
       if (move === pads[pad]) {
@@ -47,6 +64,7 @@ export default function Game(): JSX.Element {
           `pad index: pads[${pad}]`
         );
         setPoints(points + 1);
+        animatePoints();
       } else {
         console.log(
           "move: ",
@@ -77,10 +95,17 @@ export default function Game(): JSX.Element {
     }
   };
 
+  const pointsColor = pointsColorAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [Colors.white, Colors.greenPoints],
+  });
+
   return (
     <PanGestureHandler onGestureEvent={handleGesture}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.counter}>{points}</Text>
+        <Animated.Text style={[styles.counter, { color: pointsColor }]}>
+          {points}
+        </Animated.Text>
 
         {pads.map((p: Move, i: number) => (
           <Pad
